@@ -10,6 +10,7 @@ export type TaskContextType = {
   deleteTask: (id: string) => Promise<void>;
   editTask: (updatedTask: Task) => Promise<void>;
   reload: () => Promise<void>;
+  reorderTasks: (newOrder: Task[]) => void;
 };
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -75,8 +76,14 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [fetchTasks]);
 
+  const reorderTasks = useCallback((newOrder: Task[]) => {
+    setTasks(newOrder);
+    // Persist to localStorage
+    window.localStorage.setItem('tasks', JSON.stringify(newOrder));
+  }, []);
+
   return (
-    <TaskContext.Provider value={{ tasks, loading, error, addTask, deleteTask, editTask, reload: fetchTasks }}>
+    <TaskContext.Provider value={{ tasks, loading, error, addTask, deleteTask, editTask, reload: fetchTasks, reorderTasks }}>
       {children}
     </TaskContext.Provider>
   );
