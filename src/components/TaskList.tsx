@@ -9,11 +9,11 @@ type TaskListProps = {
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   if (tasks.length === 0) {
-    return <p>No tasks found</p>;
+    return <p style={{ color: '#888', textAlign: 'center', marginTop: 40 }}>No records available.</p>;
   }
 
   return (
-    <div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 36 }}>
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}

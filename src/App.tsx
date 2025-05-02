@@ -2,9 +2,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import CreateTaskPage from './pages/CreateTaskPage';
-import { TaskProvider } from './context/TaskContext';
 import EditTaskPage from './pages/EditTaskPage';
-import TaskListPage from './pages/TaskListPage';
+import FilterOperationsPage from './pages/FilterOperationsPage';
+import { TaskProvider } from './context/TaskContext';
+import MainLayout from './components/MainLayout';
 
 function App() {
   return (
@@ -12,10 +13,38 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/create-task" element={<CreateTaskPage />} />
-          {/* <Route path="/edit-task/:id" element={<EditTaskPage />} /> */}
-          <Route path="/edit/:id" element={<EditTaskPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/create-task"
+            element={
+              <MainLayout>
+                <CreateTaskPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <MainLayout>
+                <EditTaskPage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/filter"
+            element={
+              <MainLayout>
+                <FilterOperationsPage />
+              </MainLayout>
+            }
+          />
         </Routes>
       </Router>
     </TaskProvider>
