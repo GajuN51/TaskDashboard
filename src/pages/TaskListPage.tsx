@@ -10,7 +10,7 @@ const TaskListPage = () => {
       <TaskFilter />
       <TaskList />
       <Link to="/create">
-        <button style={{ marginTop: '1rem' }}>➕ Add New Task</button>
+        <button style={{ marginTop: '1rem' }}>Add New Task</button>
       </Link>
     </div>
   );

@@ -1,54 +1,57 @@
-# React + TypeScript + Vite
+# Task Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive, themeable task management dashboard built with React. This project demonstrates intermediate to advanced React concepts, including context, custom hooks, async data handling, theming, and more.
 
-Currently, two official plugins are available:
+##  Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Task Management**: Create, edit, delete, and view tasks
+- **Task Filtering**: Filter tasks by status, priority, and search
+- **Task Detail View**: View all details for a single task
+- **Light/Dark Theme**: Toggle between light and dark mode (persistent)
+- **Persistent Data**: Tasks are saved in localStorage
+- **Mock API**: Simulated async CRUD operations with loading and error states
+- **Performance Optimizations**: Uses React.memo, useCallback, and useMemo
+- **Responsive Layout**: (Basic)
 
-## Expanding the ESLint configuration
+##  Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/context/TaskContext.tsx` — Task data, CRUD, and state management
+- `src/context/ThemeContext.tsx` — Theme state and toggle
+- `src/api/mockTaskApi.ts` — Mock async API with localStorage
+- `src/components/Sidebar.tsx` — Sidebar navigation and theme toggle
+- `src/components/MainLayout.tsx` — Layout with sidebar and main content
+- `src/pages/` — Dashboard, Create, Edit, Filter, and Task Detail pages
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+##  Setup Instructions
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/GajuN51/TaskDashboard.git
+   cd to the folder
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Start the development server:**
+   ```bash
+   npm start
+   ```
+4. **Open in your browser:**
+   Visit [http://localhost:5173]
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+##  Assumptions & Decisions
+- All data is stored in localStorage (no real backend)
+- Mock API simulates network delay and errors
+- Sidebar is always white; main content area changes with theme
+- Form validation is handled in a utility function
+- Theming is managed via CSS variables and context
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+##  How to Use
+- Use the sidebar to navigate between Task Management and Filter Operations
+- Add, edit, delete, and view tasks
+- Toggle light/dark mode using the sidebar button
+- All changes are saved automatically in  browser
+
+---
+

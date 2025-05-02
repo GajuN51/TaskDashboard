@@ -1,8 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { Task } from '../types/task';
 import { mockTaskApi } from '../api/mockTaskApi';
 
-// Define the context type
 export type TaskContextType = {
   tasks: Task[];
   loading: boolean;
@@ -13,16 +12,14 @@ export type TaskContextType = {
   reload: () => Promise<void>;
 };
 
-// Create the context
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
-// Provider
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -33,13 +30,13 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
-  const addTask = async (taskData: Omit<Task, 'id' | 'createdAt'>) => {
+  const addTask = useCallback(async (taskData: Omit<Task, 'id' | 'createdAt'>) => {
     setLoading(true);
     setError(null);
     try {
@@ -50,9 +47,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchTasks]);
 
-  const deleteTask = async (id: string) => {
+  const deleteTask = useCallback(async (id: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -63,9 +60,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchTasks]);
 
-  const editTask = async (updatedTask: Task) => {
+  const editTask = useCallback(async (updatedTask: Task) => {
     setLoading(true);
     setError(null);
     try {
@@ -76,7 +73,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchTasks]);
 
   return (
     <TaskContext.Provider value={{ tasks, loading, error, addTask, deleteTask, editTask, reload: fetchTasks }}>

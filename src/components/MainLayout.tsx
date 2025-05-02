@@ -3,9 +3,11 @@ import React from 'react';
 import Sidebar from './Sidebar';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6f8' }}>
+  <div style={{ display: 'flex', minHeight: '100vh' }}>
     <Sidebar />
-    <div style={{ flex: 1 }}>{children}</div>
+    <div className="main-content" style={{ flex: 1 }}>
+      {children}
+    </div>
   </div>
 );
 

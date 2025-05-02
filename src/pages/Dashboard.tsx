@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { tasks } = useTaskContext();
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
+    <div className="main-content" style={{ padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <h2 style={{ fontWeight: 800, fontSize: '1.7rem', marginBottom: 24, textAlign: 'center' }}>Task Management</h2>
         <Link to="/create-task">
