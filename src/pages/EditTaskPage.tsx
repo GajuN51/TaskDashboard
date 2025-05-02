@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTaskContext } from '../context/TaskContext';
 import { useTaskActions } from '../hooks/useTaskActions';
+import { validateTask } from '../utils/taskValidation';
 
 const EditTaskPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,7 +10,6 @@ const EditTaskPage = () => {
   const { tasks } = useTaskContext();
   const { editTask } = useTaskActions();
 
-  // Find the task by ID, or handle undefined id
   const task = id ? tasks.find((t) => t.id === id) : undefined;
 
   const [title, setTitle] = useState('');
@@ -17,7 +17,7 @@ const EditTaskPage = () => {
   const [status, setStatus] = useState<'todo' | 'in-progress' | 'completed'>('todo');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low');
   const [dueDate, setDueDate] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (task) {
@@ -27,102 +27,226 @@ const EditTaskPage = () => {
       setPriority(task.priority);
       setDueDate(task.dueDate ? task.dueDate.toISOString().split('T')[0] : '');
     } else {
-      // Redirect to dashboard if task is not found
       navigate('/');
     }
   }, [task, navigate]);
 
-  const validateDueDate = (date: string): boolean => {
-    if (!date) return true; // Allow empty due date (optional)
-    const selectedDate = new Date(date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time to start of day for comparison
-    return selectedDate >= today;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (task) {
-      if (!validateDueDate(dueDate)) {
-        setError('Due date cannot be in the past.');
-        return;
-      }
-
-      editTask({
-        ...task,
+      const taskData = {
         title,
         description,
         status,
         priority,
         dueDate: dueDate ? new Date(dueDate) : undefined,
+      };
+      const validationErrors = validateTask(taskData);
+      if (validationErrors.length > 0) {
+        const errorMap: { [key: string]: string } = {};
+        validationErrors.forEach((error) => {
+          if (error.includes('Title')) errorMap.title = error;
+          else if (error.includes('Description')) errorMap.description = error;
+          else if (error.includes('Due date')) errorMap.dueDate = error;
+          else if (error.includes('status')) errorMap.status = error;
+          else if (error.includes('priority')) errorMap.priority = error;
+        });
+        setErrors(errorMap);
+        return;
+      }
+
+      editTask({
+        ...task,
+        ...taskData,
       });
       navigate('/');
     }
   };
 
-  // If task is undefined, return null (useEffect will handle navigation)
   if (!task) {
     return null;
   }
 
   return (
-    <div>
-      <h2>Edit Task</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Edit Task</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Title:</label>
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setErrors((prev) => ({ ...prev, title: '' }));
+            }}
             required
+            style={{
+              width: '100%',
+              padding: '8px',
+              border: errors.title ? '1px solid #ff9800' : '1px solid #ddd',
+              borderRadius: '4px',
+            }}
           />
+          {errors.title && (
+            <p
+              style={{
+                color: '#fff',
+                backgroundColor: '#ff9800',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                marginTop: '5px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {errors.title}
+            </p>
+          )}
         </div>
-        <div>
-          <label>Description:</label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Description:</label>
           <input
             type="text"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              setErrors((prev) => ({ ...prev, description: '' }));
+            }}
             required
+            style={{
+              width: '100%',
+              padding: '8px',
+              border: errors.description ? '1px solid #ff9800' : '1px solid #ddd',
+              borderRadius: '4px',
+            }}
           />
+          {errors.description && (
+            <p
+              style={{
+                color: '#fff',
+                backgroundColor: '#ff9800',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                marginTop: '5px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {errors.description}
+            </p>
+          )}
         </div>
-        <div>
-          <label>Status:</label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Status:</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as 'todo' | 'in-progress' | 'completed')}
+            style={{
+              width: '100%',
+              padding: '8px',
+              border: errors.status ? '1px solid #ff9800' : '1px solid #ddd',
+              borderRadius: '4px',
+            }}
           >
             <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
+          {errors.status && (
+            <p
+              style={{
+                color: '#fff',
+                backgroundColor: '#ff9800',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                marginTop: '5px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {errors.status}
+            </p>
+          )}
         </div>
-        <div>
-          <label>Priority:</label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Priority:</label>
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
+            style={{
+              width: '100%',
+              padding: '8px',
+              border: errors.priority ? '1px solid #ff9800' : '1px solid #ddd',
+              borderRadius: '4px',
+            }}
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
+          {errors.priority && (
+            <p
+              style={{
+                color: '#fff',
+                backgroundColor: '#ff9800',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                marginTop: '5px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {errors.priority}
+            </p>
+          )}
         </div>
-        <div>
-          <label>Due Date:</label>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Due Date:</label>
           <input
             type="date"
             value={dueDate}
             onChange={(e) => {
               setDueDate(e.target.value);
-              setError(null); // Clear error on change
+              setErrors((prev) => ({ ...prev, dueDate: '' }));
             }}
-            min={new Date().toISOString().split('T')[0]} // Prevent past dates in UI
+            style={{
+              width: '100%',
+              padding: '8px',
+              border: errors.dueDate ? '1px solid #ff9800' : '1px solid #ddd',
+              borderRadius: '4px',
+            }}
           />
+          {errors.dueDate && (
+            <p
+              style={{
+                color: '#fff',
+                backgroundColor: '#ff9800',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                marginTop: '5px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {errors.dueDate}
+            </p>
+          )}
         </div>
-        <button type="submit">Update Task</button>
+        <button
+          type="submit"
+          style={{
+            width: '100%',
+            padding: '10px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Update Task
+        </button>
       </form>
     </div>
   );
