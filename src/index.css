@@ -155,3 +155,43 @@ body {
   background-color: var(--btn-view);
   color: white;
 }
+
+@media (max-width: 800px) {
+  .main-content {
+    padding: 1rem !important;
+  }
+  .bg-card {
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+  .sidebar {
+    width: 100vw !important;
+    min-width: 0 !important;
+    min-height: unset !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    z-index: 2;
+  }
+  .sidebar h1 {
+    font-size: 1.5rem !important;
+    margin: 16px 0 16px 10px !important;
+  }
+  .sidebar > div {
+    flex-direction: row !important;
+    gap: 8px !important;
+    margin-bottom: 8px;
+  }
+  .sidebar a, .sidebar button {
+    font-size: 1rem !important;
+    padding: 8px 10px !important;
+    margin: 4px !important;
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  .main-content > div[style*='grid'] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
