@@ -13,7 +13,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 36 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18 }}>
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}

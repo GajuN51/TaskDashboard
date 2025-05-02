@@ -4,6 +4,36 @@ import { useTaskContext } from '../context/TaskContext';
 import { useTaskActions } from '../hooks/useTaskActions';
 import { validateTask } from '../utils/taskValidation';
 
+const inputStyle = {
+  width: '100%',
+  padding: 14,
+  borderRadius: 8,
+  border: '1.5px solid #ccc',
+  fontSize: 16,
+  marginBottom: 0,
+  background: '#fff',
+  color: '#222',
+  outline: 'none',
+};
+const labelStyle = {
+  display: 'block',
+  marginBottom: 8,
+  fontWeight: 600,
+};
+const errorStyle = {
+  color: '#f44336',
+  fontSize: 14,
+  marginTop: 4,
+};
+const buttonStyle = {
+  padding: '10px 24px',
+  borderRadius: 6,
+  fontWeight: 700,
+  fontSize: 16,
+  cursor: 'pointer',
+  border: 'none',
+};
+
 const EditTaskPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -68,185 +98,72 @@ const EditTaskPage = () => {
   }
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Edit Task</h2>
+    <div style={{ maxWidth: 650, margin: '48px auto', background: '#fff', borderRadius: 14, boxShadow: '0 2px 16px #f0f1f2', padding: 36 }}>
+      <h2 style={{ textAlign: 'center', marginBottom: 32, fontSize: 32, fontWeight: 800 }}>Edit Task</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Title:</label>
+        <div style={{ marginBottom: 22 }}>
+          <label style={labelStyle}>Title</label>
           <input
             type="text"
+            placeholder="e.g., Task title"
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              setErrors((prev) => ({ ...prev, title: '' }));
-            }}
-            required
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: errors.title ? '1px solid #ff9800' : '1px solid #ddd',
-              borderRadius: '4px',
-            }}
+            onChange={e => { setTitle(e.target.value); setErrors(prev => ({ ...prev, title: '' })); }}
+            style={inputStyle}
           />
-          {errors.title && (
-            <p
-              style={{
-                color: '#fff',
-                backgroundColor: '#ff9800',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                marginTop: '5px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              {errors.title}
-            </p>
-          )}
+          {errors.title && <div style={errorStyle}>{errors.title}</div>}
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Description:</label>
+        <div style={{ marginBottom: 22 }}>
+          <label style={labelStyle}>Description</label>
           <input
             type="text"
+            placeholder="e.g., Task description"
             value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-              setErrors((prev) => ({ ...prev, description: '' }));
-            }}
-            required
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: errors.description ? '1px solid #ff9800' : '1px solid #ddd',
-              borderRadius: '4px',
-            }}
+            onChange={e => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: '' })); }}
+            style={inputStyle}
           />
-          {errors.description && (
-            <p
-              style={{
-                color: '#fff',
-                backgroundColor: '#ff9800',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                marginTop: '5px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              {errors.description}
-            </p>
-          )}
+          {errors.description && <div style={errorStyle}>{errors.description}</div>}
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Status:</label>
+        <div style={{ marginBottom: 22 }}>
+          <label style={labelStyle}>Status</label>
           <select
             value={status}
-            onChange={(e) => setStatus(e.target.value as 'todo' | 'in-progress' | 'completed')}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: errors.status ? '1px solid #ff9800' : '1px solid #ddd',
-              borderRadius: '4px',
-            }}
+            onChange={e => { setStatus(e.target.value as any); setErrors(prev => ({ ...prev, status: '' })); }}
+            style={inputStyle}
           >
             <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
-          {errors.status && (
-            <p
-              style={{
-                color: '#fff',
-                backgroundColor: '#ff9800',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                marginTop: '5px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              {errors.status}
-            </p>
-          )}
+          {errors.status && <div style={errorStyle}>{errors.status}</div>}
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Priority:</label>
+        <div style={{ marginBottom: 22 }}>
+          <label style={labelStyle}>Priority</label>
           <select
             value={priority}
-            onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: errors.priority ? '1px solid #ff9800' : '1px solid #ddd',
-              borderRadius: '4px',
-            }}
+            onChange={e => { setPriority(e.target.value as any); setErrors(prev => ({ ...prev, priority: '' })); }}
+            style={inputStyle}
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
-          {errors.priority && (
-            <p
-              style={{
-                color: '#fff',
-                backgroundColor: '#ff9800',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                marginTop: '5px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              {errors.priority}
-            </p>
-          )}
+          {errors.priority && <div style={errorStyle}>{errors.priority}</div>}
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Due Date:</label>
+        <div style={{ marginBottom: 32 }}>
+          <label style={labelStyle}>Due Date</label>
           <input
             type="date"
+            placeholder="e.g., 2024-06-01"
             value={dueDate}
-            onChange={(e) => {
-              setDueDate(e.target.value);
-              setErrors((prev) => ({ ...prev, dueDate: '' }));
-            }}
-            style={{
-              width: '100%',
-              padding: '8px',
-              border: errors.dueDate ? '1px solid #ff9800' : '1px solid #ddd',
-              borderRadius: '4px',
-            }}
+            onChange={e => { setDueDate(e.target.value); setErrors(prev => ({ ...prev, dueDate: '' })); }}
+            style={inputStyle}
           />
-          {errors.dueDate && (
-            <p
-              style={{
-                color: '#fff',
-                backgroundColor: '#ff9800',
-                padding: '5px 10px',
-                borderRadius: '4px',
-                marginTop: '5px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              {errors.dueDate}
-            </p>
-          )}
+          {errors.dueDate && <div style={errorStyle}>{errors.dueDate}</div>}
         </div>
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          Update Task
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+          <button type="button" onClick={() => navigate('/dashboard')} style={{ ...buttonStyle, background: '#f4f4f4', color: '#222' }}>Cancel</button>
+          <button type="submit" style={{ ...buttonStyle, background: '#4f46e5', color: '#fff' }}>Update Task</button>
+        </div>
       </form>
     </div>
   );
