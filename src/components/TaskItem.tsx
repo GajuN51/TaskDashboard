@@ -1,5 +1,5 @@
-// src/components/TaskItem.tsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Task } from '../types/task';
 import { useTaskActions } from '../hooks/useTaskActions';
 
@@ -8,7 +8,7 @@ type TaskItemProps = {
 };
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
-  const { deleteTask } = useTaskActions();
+  const { deleteTask } = useTaskActions(); 
 
   return (
     <div style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ddd' }}>
@@ -19,7 +19,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       <button onClick={() => deleteTask(task.id)} style={{ marginRight: '1rem' }}>
         Delete
       </button>
-      <button> Edit </button>
+      <Link to={`/edit/${task.id}`}>
+        <button style={{ marginRight: '1rem' }}>Edit</button>
+      </Link>
     </div>
   );
 };
